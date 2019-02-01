@@ -11,7 +11,7 @@
 	<groupId>com.example</groupId>
 	<artifactId>demo</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>demo</name>
+	<name>provide_services</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
@@ -60,7 +60,7 @@
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-dependencies</artifactId>
-				<version>Finchley.BUILD-SNAPSHOT</version><!--spring boot 2.0 与1.0 配置时需要选择对应版本-->
+				<version>Finchley.RELEASE</version><!--spring boot 2.0 与1.0 配置时需要选择对应版本-->
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>

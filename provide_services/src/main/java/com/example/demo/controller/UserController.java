@@ -1,9 +1,9 @@
 package com.example.demo.controller;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.demo.bean.User;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.client.discovery.DiscoveryClient;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 import java.util.logging.Logger;
 
 /**
@@ -22,9 +22,59 @@ public class UserController {
     @Value("${spring.application.name}")
     private String hostname;
 
+
+    //@Value("${ss}")
+    private String ss;
+
     @RequestMapping("/login")
     public String login(){
-        logger.info("服务host:"+port+",service_id:"+hostname);
-        return "这是一个服务提供者！";
+        logger.info("服务host:"+port+",service_id:"+hostname+"ss:"+ss);
+        System.out.println("port:"+port);
+        return "服务host:"+port+",service_id:"+hostname+"ss:"+ss;
     }
+
+    /**
+     * * 用于测试GET请求
+     * @return json
+     */
+    //@RequestMapping("/getTest")
+    @GetMapping(value = "/getTest")
+    public String getTest(@RequestParam Map<String, Object> map){
+        logger.info("服务host:"+port+",service_id:"+hostname);
+        return "这是一个服务提供者,name："+map.get("name")+";password:"+"";
+    }
+
+    /**
+     * * 用于测试POST请求
+     * @return json
+     */
+    @RequestMapping(value = "/postTest",method =RequestMethod.POST)
+    public String postTest(@RequestBody User user ){
+        return "这是一个服务提供者,name:"+user.getName()+";password:"+"";
+    }
+
+    /**
+     * * 用于测试PUT请求
+     * @param name 名称
+     * @param password 密码
+     * @return json
+     */
+    @RequestMapping("/putTest")
+    public String putTest(String name,String password){
+        logger.info("服务host:"+port+",service_id:"+hostname);
+        return "这是一个服务提供者,name"+name+";password:"+password+"";
+    }
+
+    /**
+     * * 用于测试DELETE请求
+     * @param name 名称
+     * @param password 密码
+     * @return json
+     */
+    @RequestMapping("/deleteTest")
+    public String deleteTest(String name,String password){
+        logger.info("服务host:"+port+",service_id:"+hostname);
+        return "这是一个服务提供者,name"+name+";password:"+password+"";
+    }
+
 }

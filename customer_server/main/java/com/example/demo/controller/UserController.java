@@ -1,11 +1,17 @@
 package com.example.demo.controller;
+import com.example.demo.bean.User;
+import com.example.demo.service.UserService;
+import com.google.common.collect.Maps;
+import com.netflix.loadbalancer.ILoadBalancer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Map;
 import java.util.logging.Logger;
 
 /**
@@ -19,10 +25,55 @@ public class UserController {
     @Autowired
     private RestTemplate restTemplate;
 
+    @Autowired
+    private UserService userService;
+
     @RequestMapping("/login")
     public String login()
     {
         //hello-service为服务提供者的服务名称
-        return "我是一个消费者去调用==》"+restTemplate.getForEntity("http://hello-service/user/login",String.class);
+        //return "我是一个消费者去调用==》"+restTemplate.getForEntity("http://hello-service/user/login",String.class);
+        return  userService.login();
+    }
+
+    /**
+     * * 用于测试GET请求
+     * @param name 名称
+     * @param password 密码
+     * @return json
+     */
+    @RequestMapping("/getTest")
+    public String getTest(String name,String password){
+        //方便测试，消费者参数写死
+      /*  Map<String, Object> requestMap = Maps.newHashMap();
+        requestMap.put("name", "123456");
+        requestMap.put("password", "xiao ming");
+        //服务提供者map接收
+         ResponseEntity<String> responseEntity = restTemplate.getForEntity("http://hello-service/user/getTest?name={name}&password={password}", String.class, requestMap);*/
+         ResponseEntity<String> responseEntity = restTemplate.getForEntity("http://hello-service/user/getTest?name={name}&password={password}", String.class, "admin", "123456");
+       /*
+       //未测试通
+       User user = new User();
+        user.setName("admin");
+        user.setPassword("1134253");
+        ResponseEntity<String> responseEntity = restTemplate.getForEntity("http://hello-service/user/getTest", String.class, user);*/
+        String body = responseEntity.getBody();
+        return body;
+    }
+
+    /**
+     * * 用于测试POST请求
+     * @param name 名称
+     * @param password 密码
+     * @return json
+     */
+    @RequestMapping("/postTest")
+    public String postTest(String name,String password){
+        User user = new User();
+        user.setName("admin");
+        user.setPassword("1134253");
+        ResponseEntity<String> responseEntity = restTemplate.postForEntity("http://hello-service/user/postTest", user,String.class);
+        String body = responseEntity.getBody();
+        return body;
     }
 }
