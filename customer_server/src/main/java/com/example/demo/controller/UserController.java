@@ -1,18 +1,15 @@
 package com.example.demo.controller;
 import com.example.demo.bean.User;
+import com.example.demo.service.UserCommand;
 import com.example.demo.service.UserService;
-import com.google.common.collect.Maps;
-import com.netflix.loadbalancer.ILoadBalancer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Map;
-import java.util.logging.Logger;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 /**
  *  @author zhoulk
@@ -33,7 +30,17 @@ public class UserController {
     {
         //hello-service为服务提供者的服务名称
         //return "我是一个消费者去调用==》"+restTemplate.getForEntity("http://hello-service/user/login",String.class);
-        return  userService.login();
+        String s = null;
+        Future<String> stringFuture = userService.loginAsync();
+        try {
+            s = stringFuture.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return  s;
+       // return  userService.login();
     }
 
     /**
