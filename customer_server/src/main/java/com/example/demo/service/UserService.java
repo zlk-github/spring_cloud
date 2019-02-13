@@ -25,11 +25,24 @@ public class UserService {
      *同步调用
      * @return
      */
-    @HystrixCommand(fallbackMethod = "notFindFallback")
+    @HystrixCommand(fallbackMethod = "notFindFallback1")
     public String login()
     {
         logger.info("调用：http://hello-service/user/login");
        // ResponseEntity<String> forEntity = restTemplate.getForEntity("http://hello-service/user/login", String.class);
+        String forObject = restTemplate.getForObject("http://hello-service/user/login", String.class);
+        return "我是一个消费者去调用==》"+forObject;
+    }
+
+    /**
+     *ignoreExceptions指定忽略的异常,当异常满足时，不会触发notFindFallback
+     * @return
+     */
+    @HystrixCommand(ignoreExceptions = {Exception.class})
+    public String loginIngore()
+    {
+        logger.info("调用：http://hello-service/user/login");
+        // ResponseEntity<String> forEntity = restTemplate.getForEntity("http://hello-service/user/login", String.class);
         String forObject = restTemplate.getForObject("http://hello-service/user/login", String.class);
         return "我是一个消费者去调用==》"+forObject;
     }
@@ -50,8 +63,21 @@ public class UserService {
         };
     }
 
+    /**
+     * 异常触发方法
+     * @return
+     */
     public String notFindFallback()
     {
         return "error";
+    }
+
+    /**
+     * 异常捕获方法
+     * @return
+     */
+    public String notFindFallback1(Throwable e)
+    {
+        return e.getMessage();
     }
 }

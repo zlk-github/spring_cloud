@@ -30,7 +30,7 @@ public class UserController {
     {
         //hello-service为服务提供者的服务名称
         //return "我是一个消费者去调用==》"+restTemplate.getForEntity("http://hello-service/user/login",String.class);
-        String s = null;
+       /* String s = null;
         Future<String> stringFuture = userService.loginAsync();
         try {
             s = stringFuture.get();
@@ -39,8 +39,10 @@ public class UserController {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-        return  s;
-       // return  userService.login();
+        return  s;*/
+        //return  userService.login();
+        String s = userService.login();
+        return userService.login();
     }
 
     /**
