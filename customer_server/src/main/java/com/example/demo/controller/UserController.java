@@ -2,12 +2,15 @@ package com.example.demo.controller;
 import com.example.demo.bean.User;
 import com.example.demo.service.UserCommand;
 import com.example.demo.service.UserService;
+import com.netflix.hystrix.strategy.concurrency.HystrixRequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -59,7 +62,7 @@ public class UserController {
         requestMap.put("password", "xiao ming");
         //服务提供者map接收
          ResponseEntity<String> responseEntity = restTemplate.getForEntity("http://hello-service/user/getTest?name={name}&password={password}", String.class, requestMap);*/
-         ResponseEntity<String> responseEntity = restTemplate.getForEntity("http://hello-service/user/getTest?name={name}&password={password}", String.class, "admin", "123456");
+        ResponseEntity<String> responseEntity = restTemplate.getForEntity("http://hello-service/user/getTest?name={name}&password={password}", String.class, "admin", "123456");
        /*
        //未测试通
        User user = new User();
@@ -84,5 +87,17 @@ public class UserController {
         ResponseEntity<String> responseEntity = restTemplate.postForEntity("http://hello-service/user/postTest", user,String.class);
         String body = responseEntity.getBody();
         return body;
+    }
+
+    @RequestMapping("/users")
+    public String users() throws ExecutionException, InterruptedException {
+        //开启上下文TheardLocal
+        HystrixRequestContext context = HystrixRequestContext.initializeContext();
+        Future<User> demo1 = userService.find(1001L);
+        Future<User> demo2 = userService.find(1002L);
+        System.out.println(demo1.get());
+        System.out.println(demo2.get());
+        context.close();
+        return "";
     }
 }

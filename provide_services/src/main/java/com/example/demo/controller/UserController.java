@@ -3,6 +3,8 @@ import com.example.demo.bean.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -77,4 +79,20 @@ public class UserController {
         return "这是一个服务提供者,name"+name+";password:"+password+"";
     }
 
+
+
+    @RequestMapping("/findAll")
+    public  List<User> findAll(String ids){
+        logger.info("服务host:"+port+",service_id:"+hostname+"ss:"+ss);
+        System.out.println("port:"+port);
+        User user;
+        ArrayList<User> list = new ArrayList();
+        for(int i=0;i<=2;i++){
+            user  = new User();
+            user.setName("name"+i);
+            user.setPassword("pw"+i);
+            list.add(user);
+        }
+        return list;
+    }
 }

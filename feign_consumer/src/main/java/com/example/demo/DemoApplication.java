@@ -3,19 +3,17 @@ package com.example.demo;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 
-
-/**启动类
- * @author zhoulk
- * @date  2019-01-03
- *///@EnableDiscoveryClient
+//feign
+@EnableFeignClients
+//服务发现
+@EnableDiscoveryClient
 @SpringBootApplication
-public class ProvideApplication {
+public class DemoApplication {
 
 	public static void main(String[] args) {
-
-		SpringApplication.run(ProvideApplication.class, args);
+		SpringApplication.run(DemoApplication.class, args);
 	}
 
 }
-

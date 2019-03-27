@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+import rx.Observable;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -39,6 +40,9 @@ public class UserCommandTest {
         String login = userService.login();
         System.out.println("==============================================");
         System.out.println(login);
+        Observable<User> observe = new UserCommand().observe();
+        new UserCommand().toObservable();
+
         //System.out.println(new UserCommand().execute());
     }
 
